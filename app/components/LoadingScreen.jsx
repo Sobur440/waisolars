@@ -1,13 +1,15 @@
 import { useProgress } from "@react-three/drei";
 import styles from "./LoadingScreen.module.css";
 import gsap from "gsap";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const LoadingScreen = () => {
   const { progress, active } = useProgress();
   const overlayRef = useRef();
+  const [hasCompleted, setHasCompleted] = useState(false);
   useEffect(() => {
-    if (!active && overlayRef.current && progress === 100) {
+    if (!active && overlayRef.current && progress === 100 && !hasCompleted) {
+      setHasCompleted(true);
       gsap
         .timeline()
         .to(overlayRef.current, {
@@ -19,7 +21,7 @@ const LoadingScreen = () => {
           display: "none",
         });
     }
-  }, [active]);
+  }, [progress, active]);
 
   return (
     <div
